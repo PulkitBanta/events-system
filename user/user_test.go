@@ -28,7 +28,7 @@ func TestUser(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	t.Run("create user", func(t *testing.T) {
-		createdUser, err := a.InsertUser(t.Context(), user.User{
+		createdUser, err := a.CreateUser(t.Context(), user.User{
 			Name:  name,
 			Email: email,
 		})

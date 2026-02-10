@@ -7,9 +7,9 @@ import (
 )
 
 type User struct {
-	ID    uuid.UUID `json:"user_id"`
-	Name  string    `json:"user_name"`
-	Email string    `json:"user_email"`
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	Email string    `json:"email"`
 }
 
 func (u *User) Validate() error {

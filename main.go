@@ -16,13 +16,17 @@ func main() {
 	if dbDSN == "" {
 		dbDSN = "postgres://postgres:postgres@localhost:5432/eventsdb?sslmode=disable"
 		log.Println("Using default database DSN")
+	} else {
+		log.Printf("Connecting to database using POSTGRES_DSN from environment")
 	}
 
+	log.Printf("Attempting to connect to database...")
 	// Initialize database connection
 	db, err := database.Connect(dbDSN)
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
+	log.Println("Successfully connected to database")
 	defer db.Close()
 
 	service := api.NewAPI(db)
