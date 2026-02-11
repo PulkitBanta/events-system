@@ -15,18 +15,18 @@ func main() {
 	dbDSN := os.Getenv("POSTGRES_DSN")
 	if dbDSN == "" {
 		dbDSN = "postgres://postgres:postgres@localhost:5432/eventsdb?sslmode=disable"
-		log.Println("Using default database DSN")
+		log.Println("using default database DSN")
 	} else {
-		log.Printf("Connecting to database using POSTGRES_DSN from environment")
+		log.Printf("connecting to database using POSTGRES_DSN from environment")
 	}
 
-	log.Printf("Attempting to connect to database...")
+	log.Printf("attempting to connect to database...")
 	// Initialize database connection
 	db, err := database.Connect(dbDSN)
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Fatal("database connect:", err)
 	}
-	log.Println("Successfully connected to database")
+	log.Println("successfully connected to database")
 	defer db.Close()
 
 	service := api.NewAPI(db)
@@ -37,6 +37,6 @@ func main() {
 		port = "8080"
 	}
 
-	log.Printf("Server starting on port %s", port)
+	log.Printf("server starting on port %s", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), service.Handler()))
 }

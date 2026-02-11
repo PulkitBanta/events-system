@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -20,4 +21,9 @@ func (u *User) Validate() error {
 		return errors.New("email is required")
 	}
 	return nil
+}
+
+type Slot struct {
+	StartTime time.Time `json:"start_time"`
+	EndTime   time.Time `json:"end_time"`
 }
