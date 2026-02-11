@@ -12,6 +12,23 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type getEventsResponse struct {
+	Events []event.Event `json:"events"`
+}
+
+func (a *API) getEvents(w http.ResponseWriter, r *http.Request) {
+	eventAccessor := event.NewAccessor(a.db, user.NewAccessor(a.db))
+	events, err := eventAccessor.GetEvents(r.Context())
+	if err != nil {
+		a.Response(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	response := getEventsResponse{
+		Events: events,
+	}
+	a.Response(w, http.StatusOK, response)
+}
+
 type slot struct {
 	StartTime int64 `json:"start_time"`
 	EndTime   int64 `json:"end_time"`

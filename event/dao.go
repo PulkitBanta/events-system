@@ -12,6 +12,29 @@ import (
 	"github.com/google/uuid"
 )
 
+func (a *Accessor) GetEvents(ctx context.Context) ([]Event, error) {
+	query := `SELECT id, title, duration_hours, user_id, slots, created_at FROM events`
+	rows, err := a.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("query: %w", err)
+	}
+	defer rows.Close()
+
+	events := []Event{}
+	for rows.Next() {
+		var event Event
+		if err := rows.Scan(&event.ID, &event.Title, &event.DurationHours, &event.UserID, &event.Slots, &event.CreatedAt); err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+		events = append(events, event)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows: %w", err)
+	}
+
+	return events, nil
+}
+
 func (a *Accessor) CreateEvent(ctx context.Context, event Event, now time.Time) (*Event, error) {
 	if err := event.Validate(); err != nil {
 		return nil, fmt.Errorf("validate: %w", err)
